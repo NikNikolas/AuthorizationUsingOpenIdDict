@@ -1,4 +1,6 @@
+using AuthServer;
 using AuthServer.Persistence;
+using AuthServer.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -76,7 +78,30 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 builder.Services.AddOpenApi();
 
+builder.Services.AddTransient<AuthService>();
+builder.Services.AddTransient<ClientsSeeder>();
+
+builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("https://localhost:7002")
+            .AllowAnyHeader();
+    });
+});
+
+
 var app = builder.Build();
+
+using (var scope = app.Services.CreateAsyncScope())
+{
+    var seeder = scope.ServiceProvider.GetRequiredService<ClientsSeeder>();
+
+    seeder.AddClientAsync().GetAwaiter().GetResult();
+    seeder.AddScopesAsync().GetAwaiter().GetResult();
+}
 
 if (app.Environment.IsDevelopment())
 {
@@ -84,6 +109,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();
