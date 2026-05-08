@@ -1,7 +1,5 @@
 ﻿using AuthServer.Persistence;
 using OpenIddict.Abstractions;
-using OpenIddict.Core;
-using System.Runtime.CompilerServices;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace AuthServer
@@ -12,7 +10,7 @@ namespace AuthServer
 
         public ClientsSeeder(IServiceProvider serviceProvider)
         {
-            serviceProvider = _serviceProvider ?? throw new ArgumentNullException(nameof(_serviceProvider));
+            _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(_serviceProvider));
         }
 
         public async Task AddScopesAsync()
@@ -64,11 +62,11 @@ namespace AuthServer
                 DisplayName = "Postman Client Application",
                 RedirectUris =
                  {
-                    new Uri("https://localhost:7002/swagger/oauth2-redirect.html")
+                    new Uri("https://localhost:7172/swagger/oauth2-redirect.html")
                  },
                 PostLogoutRedirectUris =
                  {
-                    new Uri("https://localhost:7002/resources")
+                    new Uri("https://localhost:7172/resources")
                  },
                 Permissions = 
                 {

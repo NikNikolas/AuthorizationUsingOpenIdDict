@@ -37,7 +37,6 @@ namespace AuthServer.Controllers
 
         [HttpGet("~/connect/authorize")]
         [HttpPost("~/connect/authorize")]
-        [IgnoreAntiforgeryToken]
         public async Task<IActionResult> Authorize()
         {
             var request = HttpContext.GetOpenIddictServerRequest() ??
@@ -52,7 +51,11 @@ namespace AuthServer.Controllers
 
             if (!isAutheniticated)
             {
+                //return Redirect("/Authenticate");
+
                 var redirectUrl = _authService.BuildRedirectUrl(HttpContext.Request, parameters);
+
+                //return Redirect($"/Authenticate?ReturnUrl={Uri.EscapeDataString(redirectUrl)}");
 
                 return Challenge(properties: new AuthenticationProperties
                 {
@@ -100,7 +103,7 @@ namespace AuthServer.Controllers
             var request = HttpContext.GetOpenIddictServerRequest() ??
                 throw new InvalidOperationException("The OpenID Connect request is missing.");
 
-            if (!request.IsAuthorizationCodeFlow())
+            if (!request.IsAuthorizationCodeGrantType())
             {
                 throw new InvalidOperationException("The specified grant type is not supported.");
             }

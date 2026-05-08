@@ -48,6 +48,7 @@ namespace AuthServer.Services
         public string BuildRedirectUrl(HttpRequest request, IDictionary<string, StringValues> oAuthParameters)
         {
             var url = request.PathBase + request.Path + QueryString.Create(oAuthParameters);
+            //var url = request.Host + request.Path + QueryString.Create(oAuthParameters);
             return url;
         }
 

@@ -8,9 +8,6 @@ using static OpenIddict.Abstractions.OpenIddictConstants;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
-builder.Services.AddRazorPages();
-
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -81,14 +78,19 @@ builder.Services.AddOpenApi();
 builder.Services.AddTransient<AuthService>();
 builder.Services.AddTransient<ClientsSeeder>();
 
+builder.Services.AddControllers();
+builder.Services.AddRazorPages();
+
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("https://localhost:7002")
-            .AllowAnyHeader();
+        policy.WithOrigins("https://localhost:7172")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
 
@@ -107,8 +109,9 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
-
 app.UseHttpsRedirection();
+app.UseRouting();
+
 app.UseCors();
 
 app.UseAuthentication();
