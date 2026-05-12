@@ -37,6 +37,7 @@ namespace AuthServer.Controllers
 
         [HttpGet("~/connect/authorize")]
         [HttpPost("~/connect/authorize")]
+        [AllowCookieRedirect]
         public async Task<IActionResult> Authorize()
         {
             var request = HttpContext.GetOpenIddictServerRequest() ??
@@ -140,6 +141,7 @@ namespace AuthServer.Controllers
         }
 
         [HttpPost("~/connect/logout")]
+        [HttpGet("~/connect/logout")]
         public async Task<IActionResult> LogoutPost()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

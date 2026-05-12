@@ -73,8 +73,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         c.LoginPath = "/Authenticate";
     });
 
-builder.Services.AddOpenApi();
-
 builder.Services.AddTransient<AuthService>();
 builder.Services.AddTransient<ClientsSeeder>();
 
@@ -101,14 +99,10 @@ using (var scope = app.Services.CreateAsyncScope())
 {
     var seeder = scope.ServiceProvider.GetRequiredService<ClientsSeeder>();
 
-    seeder.AddClientAsync().GetAwaiter().GetResult();
+    seeder.AddClientsAsync().GetAwaiter().GetResult();
     seeder.AddScopesAsync().GetAwaiter().GetResult();
 }
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
 app.UseHttpsRedirection();
 app.UseRouting();
 

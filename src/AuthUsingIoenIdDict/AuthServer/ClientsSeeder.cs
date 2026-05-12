@@ -38,7 +38,7 @@ namespace AuthServer
             });
         }
 
-        public async Task AddClientAsync()
+        public async Task AddClientsAsync()
         {
             await using var scopes = _serviceProvider.CreateAsyncScope();
             var dbContext = _serviceProvider.GetRequiredService<ApplicationDbContext>();
